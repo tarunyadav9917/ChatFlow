@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Plus, Settings, MessageSquare } from 'lucide-react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { Search, Plus, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
-import { Chat, User } from '../types';
+import { Chat } from '../types';
 import { formatTime } from '../utils/storage';
 
 interface ChatListProps {
@@ -15,9 +15,9 @@ const ChatList: React.FC<ChatListProps> = ({ onChatSelect, onProfileClick, onNew
   const { currentUser } = useAuth();
   const { chats, messages, users } = useChat();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
 
-  useEffect(() => {
+  // Memoize filtered and sorted chats to avoid recalculation on every render
+  const filteredChats = useMemo(() => {
     const userChats = chats.filter(chat => 
       chat.participants.includes(currentUser?.id || '')
     );
@@ -44,10 +44,11 @@ const ChatList: React.FC<ChatListProps> = ({ onChatSelect, onProfileClick, onNew
       return bTime - aTime;
     });
 
-    setFilteredChats(filtered);
+    return filtered;
   }, [chats, searchTerm, currentUser, users]);
 
-  const getChatDisplayInfo = (chat: Chat) => {
+  // Memoize getChatDisplayInfo to avoid recreating on every render
+  const getChatDisplayInfo = useCallback((chat: Chat) => {
     if (chat.type === 'group') {
       return {
         name: chat.name || 'Group Chat',
@@ -64,14 +65,17 @@ const ChatList: React.FC<ChatListProps> = ({ onChatSelect, onProfileClick, onNew
       profilePicture: otherUser?.profilePicture || 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
       isOnline: otherUser?.isOnline || false
     };
-  };
+  }, [currentUser, users]);
 
-  const getUnreadCount = (chatId: string): number => {
-    const chatMessages = messages[chatId] || [];
+  // Memoize getUnreadCount to avoid recalculation
+  const getUnreadCount = useCallback((chatId: string): number => {
+    const chatMessages = messages[chatId];
+    if (!chatMessages) return 0;
+    
     return chatMessages.filter(msg => 
       msg.senderId !== currentUser?.id && msg.status !== 'seen'
     ).length;
-  };
+  }, [messages, currentUser?.id]);
 
   return (
     <div className="flex flex-col h-full bg-white">

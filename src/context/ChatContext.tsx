@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { ChatState, Chat, Message, User } from '../types';
 import { useAuth } from './AuthContext';
 import { loadFromStorage, saveToStorage, showNotification } from '../utils/storage';
@@ -21,7 +21,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const { currentUser } = useAuth();
   const [chats, setChats] = useState<Chat[]>([]);
   const [messages, setMessages] = useState<{ [chatId: string]: Message[] }>({});
-  const [activeChat, setActiveChat] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<string[]>([]);
 
@@ -37,7 +36,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     setBlockedUsers(savedBlockedUsers);
   }, [currentUser]);
 
-  const sendMessage = (chatId: string, content: string, type: 'text' | 'image') => {
+  const sendMessage = useCallback((chatId: string, content: string, type: 'text' | 'image') => {
     if (!currentUser) return;
 
     const newMessage: Message = {
@@ -50,61 +49,52 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       status: 'delivered'
     };
 
-    setMessages(prev => ({
-      ...prev,
-      [chatId]: [...(prev[chatId] || []), newMessage]
-    }));
+    // Batch state updates
+    setMessages(prev => {
+      const updatedMessages = {
+        ...prev,
+        [chatId]: [...(prev[chatId] || []), newMessage]
+      };
+      // Save to storage after state update
+      saveToStorage('messages', updatedMessages);
+      return updatedMessages;
+    });
 
-    // Update last message in chat
-    setChats(prev => prev.map(chat => 
-      chat.id === chatId 
-        ? { ...chat, lastMessage: newMessage }
-        : chat
-    ));
+    setChats(prev => {
+      const chat = prev.find(c => c.id === chatId);
+      const updatedChats = prev.map(chat => 
+        chat.id === chatId 
+          ? { ...chat, lastMessage: newMessage }
+          : chat
+      );
+      // Save to storage after state update
+      saveToStorage('chats', updatedChats);
+      
+      // Show notification to other participants
+      if (chat && !chat.isMuted) {
+        showNotification('New message', content);
+      }
+      
+      return updatedChats;
+    });
+  }, [currentUser]);
 
-    // Save to storage
-    const updatedMessages = {
-      ...messages,
-      [chatId]: [...(messages[chatId] || []), newMessage]
-    };
-    saveToStorage('messages', updatedMessages);
+  const deleteMessage = useCallback((messageId: string, chatId: string) => {
+    setMessages(prev => {
+      const updatedMessages = {
+        ...prev,
+        [chatId]: prev[chatId].map(msg => 
+          msg.id === messageId 
+            ? { ...msg, deletedForMe: true }
+            : msg
+        )
+      };
+      saveToStorage('messages', updatedMessages);
+      return updatedMessages;
+    });
+  }, []);
 
-    const updatedChats = chats.map(chat => 
-      chat.id === chatId 
-        ? { ...chat, lastMessage: newMessage }
-        : chat
-    );
-    saveToStorage('chats', updatedChats);
-
-    // Show notification to other participants
-    const chat = chats.find(c => c.id === chatId);
-    if (chat && !chat.isMuted) {
-      showNotification('New message', content);
-    }
-  };
-
-  const deleteMessage = (messageId: string, chatId: string) => {
-    setMessages(prev => ({
-      ...prev,
-      [chatId]: prev[chatId].map(msg => 
-        msg.id === messageId 
-          ? { ...msg, deletedForMe: true }
-          : msg
-      )
-    }));
-
-    const updatedMessages = {
-      ...messages,
-      [chatId]: messages[chatId].map(msg => 
-        msg.id === messageId 
-          ? { ...msg, deletedForMe: true }
-          : msg
-      )
-    };
-    saveToStorage('messages', updatedMessages);
-  };
-
-  const createChat = (participantIds: string[], type: 'private' | 'group', name?: string): string => {
+  const createChat = useCallback((participantIds: string[], type: 'private' | 'group', name?: string): string => {
     if (!currentUser) return '';
 
     const chatId = Math.random().toString(36).substr(2, 9);
@@ -119,68 +109,81 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       createdAt: new Date()
     };
 
-    const updatedChats = [...chats, newChat];
-    setChats(updatedChats);
-    saveToStorage('chats', updatedChats);
+    setChats(prev => {
+      const updatedChats = [...prev, newChat];
+      saveToStorage('chats', updatedChats);
+      return updatedChats;
+    });
 
     return chatId;
-  };
+  }, [currentUser]);
 
-  const blockUser = (userId: string) => {
-    const updatedBlockedUsers = [...blockedUsers, userId];
-    setBlockedUsers(updatedBlockedUsers);
-    saveToStorage(`blockedUsers_${currentUser?.id}`, updatedBlockedUsers);
-  };
+  const blockUser = useCallback((userId: string) => {
+    setBlockedUsers(prev => {
+      const updatedBlockedUsers = [...prev, userId];
+      saveToStorage(`blockedUsers_${currentUser?.id}`, updatedBlockedUsers);
+      return updatedBlockedUsers;
+    });
+  }, [currentUser?.id]);
 
-  const unblockUser = (userId: string) => {
-    const updatedBlockedUsers = blockedUsers.filter(id => id !== userId);
-    setBlockedUsers(updatedBlockedUsers);
-    saveToStorage(`blockedUsers_${currentUser?.id}`, updatedBlockedUsers);
-  };
+  const unblockUser = useCallback((userId: string) => {
+    setBlockedUsers(prev => {
+      const updatedBlockedUsers = prev.filter(id => id !== userId);
+      saveToStorage(`blockedUsers_${currentUser?.id}`, updatedBlockedUsers);
+      return updatedBlockedUsers;
+    });
+  }, [currentUser?.id]);
 
-  const muteChat = (chatId: string) => {
-    const updatedChats = chats.map(chat => 
-      chat.id === chatId ? { ...chat, isMuted: true } : chat
-    );
-    setChats(updatedChats);
-    saveToStorage('chats', updatedChats);
-  };
+  const muteChat = useCallback((chatId: string) => {
+    setChats(prev => {
+      const updatedChats = prev.map(chat => 
+        chat.id === chatId ? { ...chat, isMuted: true } : chat
+      );
+      saveToStorage('chats', updatedChats);
+      return updatedChats;
+    });
+  }, []);
 
-  const unmuteChat = (chatId: string) => {
-    const updatedChats = chats.map(chat => 
-      chat.id === chatId ? { ...chat, isMuted: false } : chat
-    );
-    setChats(updatedChats);
-    saveToStorage('chats', updatedChats);
-  };
+  const unmuteChat = useCallback((chatId: string) => {
+    setChats(prev => {
+      const updatedChats = prev.map(chat => 
+        chat.id === chatId ? { ...chat, isMuted: false } : chat
+      );
+      saveToStorage('chats', updatedChats);
+      return updatedChats;
+    });
+  }, []);
 
-  const markMessagesAsSeen = (chatId: string) => {
+  const markMessagesAsSeen = useCallback((chatId: string) => {
     if (!currentUser) return;
 
-    setMessages(prev => ({
-      ...prev,
-      [chatId]: prev[chatId]?.map(msg => 
+    setMessages(prev => {
+      // Check if there are any messages to update before creating new state
+      const chatMsgs = prev[chatId];
+      if (!chatMsgs) return prev;
+      
+      const hasUnseenMessages = chatMsgs.some(msg => 
         msg.senderId !== currentUser.id && msg.status !== 'seen'
-          ? { ...msg, status: 'seen' }
-          : msg
-      ) || []
-    }));
-
-    const updatedMessages = {
-      ...messages,
-      [chatId]: messages[chatId]?.map(msg => 
-        msg.senderId !== currentUser.id && msg.status !== 'seen'
-          ? { ...msg, status: 'seen' }
-          : msg
-      ) || []
-    };
-    saveToStorage('messages', updatedMessages);
-  };
+      );
+      
+      if (!hasUnseenMessages) return prev;
+      
+      const updatedMessages = {
+        ...prev,
+        [chatId]: chatMsgs.map(msg => 
+          msg.senderId !== currentUser.id && msg.status !== 'seen'
+            ? { ...msg, status: 'seen' }
+            : msg
+        )
+      };
+      saveToStorage('messages', updatedMessages);
+      return updatedMessages;
+    });
+  }, [currentUser]);
 
   const value: ChatState = {
     chats,
     messages,
-    activeChat,
     users,
     blockedUsers,
     sendMessage,

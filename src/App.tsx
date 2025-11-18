@@ -6,12 +6,12 @@ import ChatList from './components/ChatList';
 import ChatScreen from './components/ChatScreen';
 import Profile from './components/Profile';
 import NewChatModal from './components/NewChatModal';
-import { loadFromStorage, saveToStorage, generateRandomAvatar } from './utils/storage';
+import { loadFromStorage, saveToStorage } from './utils/storage';
 
 type Screen = 'chatList' | 'chat' | 'profile';
 
 const AppContent: React.FC = () => {
-  const { isAuthenticated, currentUser } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [currentScreen, setCurrentScreen] = useState<Screen>('chatList');
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [showNewChatModal, setShowNewChatModal] = useState(false);

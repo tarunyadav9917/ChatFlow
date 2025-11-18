@@ -8,7 +8,7 @@ export const loadFromStorage = (key: string) => {
   }
 };
 
-export const saveToStorage = (key: string, value: any) => {
+export const saveToStorage = (key: string, value: unknown) => {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {

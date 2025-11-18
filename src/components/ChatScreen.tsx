@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Send, Image, MoreVertical, Phone, Video, Info } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { ArrowLeft, Send, Image, MoreVertical, Phone, Video } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
-import { User, Message } from '../types';
 import { formatTime } from '../utils/storage';
 import MessageBubble from './MessageBubble';
 import ChatOptionsModal from './ChatOptionsModal';
@@ -20,8 +19,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chatId, onBack }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const chat = chats.find(c => c.id === chatId);
-  const chatMessages = messages[chatId] || [];
+  const chat = useMemo(() => chats.find(c => c.id === chatId), [chats, chatId]);
+  const chatMessages = useMemo(() => messages[chatId] || [], [messages, chatId]);
 
   useEffect(() => {
     // Mark messages as seen when chat opens
@@ -31,9 +30,9 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chatId, onBack }) => {
   useEffect(() => {
     // Auto-scroll to bottom when new messages arrive
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages]);
+  }, [chatMessages.length]); // Only depend on length to avoid unnecessary scrolls
 
-  const getChatDisplayInfo = () => {
+  const getChatDisplayInfo = useMemo(() => {
     if (!chat) return null;
 
     if (chat.type === 'group') {
@@ -54,17 +53,17 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chatId, onBack }) => {
       isOnline: otherUser?.isOnline || false,
       lastSeen: otherUser?.lastSeen || null
     };
-  };
+  }, [chat, currentUser, users]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (messageText.trim()) {
       sendMessage(chatId, messageText.trim(), 'text');
       setMessageText('');
     }
-  };
+  }, [messageText, chatId, sendMessage]);
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -75,9 +74,9 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chatId, onBack }) => {
       reader.readAsDataURL(file);
     }
     e.target.value = '';
-  };
+  }, [chatId, sendMessage]);
 
-  const displayInfo = getChatDisplayInfo();
+  const displayInfo = getChatDisplayInfo;
 
   if (!chat || !displayInfo) {
     return (
