@@ -1,1 +1,400 @@
- ChatFlow<div align="center">![ChatFlow Banner](https://img.shields.io/badge/ChatFlow-Real--time%20Messaging-blue?style=for-the-badge&logo=react)**A modern, feature-rich real-time chat application built with React, TypeScript, and Vite**[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)[![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)[![Vite](https://img.shields.io/badge/Vite-5.4.2-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.1-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)[Features](#-features) • [Tech Stack](#-tech-stack) • [Installation](#-installation) • [Usage](#-usage) • [Project Structure](#-project-structure)</div>---## 📖 OverviewChatFlow is a sleek and modern real-time chat application that provides seamless messaging experience with a beautiful user interface. Built with cutting-edge technologies, it offers both mobile and desktop responsive layouts, making communication effortless across all devices.## ✨ Features### 🔐 Authentication- **User Registration & Login** - Secure signup and login system- **Profile Management** - Update profile information and avatar- **User Sessions** - Persistent authentication using local storage### 💬 Messaging- **Real-time Messaging** - Instant message delivery- **Private Chats** - One-on-one conversations- **Group Chats** - Create and participate in group discussions- **Message Status** - Track message delivery (sending, delivered, seen)- **Message Deletion** - Delete messages from your view- **Image Sharing** - Share images in conversations### 👥 User Features- **Online Status** - See who's currently online- **Last Seen** - View when users were last active- **User Profiles** - View detailed user information- **Profile Pictures** - Personalized avatars- **User Blocking** - Block/unblock unwanted users### 🔔 Chat Management- **Mute Notifications** - Mute/unmute specific chats- **Chat List** - View all your conversations in one place- **Search Users** - Find and start conversations with users- **Unread Messages** - Visual indicators for unread messages### 🎨 User Experience- **Responsive Design** - Optimized for mobile, tablet, and desktop- **Dark Mode Ready** - Clean and modern UI- **Smooth Animations** - Polished transitions and interactions- **Intuitive Interface** - Easy-to-use chat interface## 🛠 Tech Stack### Frontend Framework- **[React 18.3.1](https://reactjs.org/)** - Modern React with hooks and context API- **[TypeScript 5.5.3](https://www.typescriptlang.org/)** - Type-safe JavaScript for better development experience- **[Vite 5.4.2](https://vitejs.dev/)** - Next-generation frontend build tool for blazing fast HMR### Styling- **[Tailwind CSS 3.4.1](https://tailwindcss.com/)** - Utility-first CSS framework- **[PostCSS 8.4.35](https://postcss.org/)** - CSS transformation- **[Autoprefixer 10.4.18](https://autoprefixer.github.io/)** - Automatic vendor prefixing### UI Components & Icons- **[Lucide React 0.344.0](https://lucide.dev/)** - Beautiful & consistent icon library### Development Tools- **[ESLint 9.9.1](https://eslint.org/)** - Code linting and quality checks- **[TypeScript ESLint 8.3.0](https://typescript-eslint.io/)** - TypeScript-specific linting rules### State Management- **React Context API** - Built-in state management for authentication and chat state- **Local Storage** - Data persistence across sessions## 📦 Installation### PrerequisitesBefore you begin, ensure you have the following installed:- **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)- **npm** or **yarn** - Package manager (comes with Node.js)- **Git** - Version control system### Step-by-step Installation1. **Clone the repository**   ```bash   git clone https://github.com/tarunyadav9917/ChatFlow.git   cd ChatFlow   ```2. **Install dependencies**   ```bash   npm install   ```   or with yarn:   ```bash   yarn install   ```3. **Start the development server**   ```bash   npm run dev   ```   or with yarn:   ```bash   yarn dev   ```4. **Open your browser**      Navigate to `http://localhost:5173` (or the port shown in your terminal)## 🚀 Usage### Running the Application#### Development ModeStart the development server with hot module replacement:```bashnpm run dev```#### Production BuildBuild the application for production:```bashnpm run build```#### Preview Production BuildPreview the production build locally:```bashnpm run preview```#### LintingRun ESLint to check code quality:```bashnpm run lint```### Getting Started with the App1. **Create an Account**   - Click on "Sign Up" on the login screen   - Fill in your username, email, name, and password   - Click "Sign Up" to create your account2. **Login**   - Enter your email and password   - Click "Login" to access the app3. **Start Chatting**   - Click "Start New Chat" to begin a conversation   - Select a user from the available users list   - Start sending messages!4. **Explore Features**   - Click on a chat to view the conversation   - Use the options menu (three dots) to mute/unmute chats   - Click on your profile picture to view/edit your profile   - Block/unblock users from the chat options menu## 📁 Project Structure```ChatFlow/├── public/              # Static assets├── src/│   ├── components/      # React components│   │   ├── ChatList.tsx          # List of all chats│   │   ├── ChatScreen.tsx        # Main chat interface│   │   ├── ChatOptionsModal.tsx  # Chat settings modal│   │   ├── Login.tsx             # Authentication component│   │   ├── MessageBubble.tsx     # Individual message component│   │   ├── NewChatModal.tsx      # Create new chat modal│   │   └── Profile.tsx           # User profile component│   ├── context/         # React context providers│   │   ├── AuthContext.tsx       # Authentication state management│   │   └── ChatContext.tsx       # Chat state management│   ├── types/           # TypeScript type definitions│   │   └── index.ts              # All interfaces and types│   ├── utils/           # Utility functions│   │   └── storage.ts            # Local storage helpers│   ├── App.tsx          # Main application component│   ├── main.tsx         # Application entry point│   ├── index.css        # Global styles│   └── vite-env.d.ts    # Vite type definitions├── index.html           # HTML entry point├── package.json         # Project dependencies├── tsconfig.json        # TypeScript configuration├── vite.config.ts       # Vite configuration├── tailwind.config.js   # Tailwind CSS configuration├── postcss.config.js    # PostCSS configuration├── eslint.config.js     # ESLint configuration└── README.md           # Project documentation```## 🏗️ Architecture### Context-Based State Management**AuthContext** - Manages authentication state:- User login/logout- User registration- Current user information- Profile updates**ChatContext** - Manages chat functionality:- Chat list management- Message sending/receiving- User blocking- Chat muting- Message status updates### Component Hierarchy```App├── AuthProvider│   └── ChatProvider│       ├── Login (when not authenticated)│       └── Main Layout (when authenticated)│           ├── ChatList│           ├── ChatScreen│           ├── Profile│           ├── NewChatModal│           └── ChatOptionsModal```## 🎨 Key Features Implementation### Responsive Design- Mobile-first approach with Tailwind CSS- Separate layouts for mobile and desktop- Smooth transitions between screens### Message System- Real-time message updates- Message status tracking (sending → delivered → seen)- Auto-scroll to latest messages- Image message support### User Experience- Optimistic UI updates- Loading states- Error handling- Smooth animations## 🔧 Configuration Files- **vite.config.ts** - Vite bundler configuration- **tsconfig.json** - TypeScript compiler options- **tailwind.config.js** - Tailwind CSS customization- **eslint.config.js** - Code linting rules## 🤝 ContributingContributions are welcome! Here's how you can help:1. **Fork the repository**2. **Create a feature branch**   ```bash   git checkout -b feature/AmazingFeature   ```3. **Commit your changes**   ```bash   git commit -m 'Add some AmazingFeature'   ```4. **Push to the branch**   ```bash   git push origin feature/AmazingFeature   ```5. **Open a Pull Request**## 🐛 Known Issues & Future Enhancements### Planned Features- Real backend integration with WebSocket support- End-to-end encryption- Voice and video calling- File sharing (documents, videos)- Message reactions and replies- Chat search functionality- Dark mode toggle- Push notifications## 📄 LicenseThis project is open source and available under the [MIT License](LICENSE).## 👨‍💻 Author**Tarun Yadav**- GitHub: [@tarunyadav9917](https://github.com/tarunyadav9917)## 🙏 Acknowledgments- Icons by [Lucide](https://lucide.dev/)- Images from [Pexels](https://www.pexels.com/)- Built with [Vite](https://vitejs.dev/)- Styled with [Tailwind CSS](https://tailwindcss.com/)---<div align="center">**Made with ❤️ by Tarun Yadav**If you found this project helpful, please consider giving it a ⭐!</div>
+<div align="center">
+
+# 💬 ChatFlow
+
+![ChatFlow Banner](https://img.shields.io/badge/ChatFlow-Real--time%20Messaging-blue?style=for-the-badge&logo=react)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+**A modern, feature-rich real-time chat application built with React and Firebase**
+
+[🎯 Features](#-features) • [🎥 Demo](#-demo) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Getting Started](#-getting-started) • [📁 Structure](#-project-structure) • [🤝 Contributing](#-contributing)
+
+</div>
+
+---
+
+## 🌟 Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 💬 Messaging
+- ✅ **Real-time Messaging** - Instant delivery
+- ✅ **Group Chats** - Multi-user conversations
+- ✅ **Message Reactions** - Emoji support
+- ✅ **Typing Indicators** - Live typing status
+- ✅ **Read Receipts** - Message tracking
+- ✅ **Message Editing** - Edit sent messages
+- ✅ **Message Deletion** - Remove messages
+
+</td>
+<td width="50%">
+
+### 👤 User Features
+- ✅ **User Authentication** - Secure login/signup
+- ✅ **Profile Management** - Custom avatars & status
+- ✅ **Online Status** - Real-time presence
+- ✅ **File Sharing** - Images & documents
+- ✅ **Dark Mode** - Theme switching
+- ✅ **Responsive Design** - Mobile-friendly
+- ✅ **Notifications** - Stay updated
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🎥 Demo
+
+<div align="center">
+
+![ChatFlow Demo](demo.gif)
+
+**[🌐 Live Demo](https://your-demo-link.com)** | **[📹 Video Walkthrough](https://your-video-link.com)**
+
+</div>
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+### Frontend
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+
+### Backend & Services
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Firebase Auth](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Firebase Database](https://img.shields.io/badge/Realtime_DB-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Firebase Storage](https://img.shields.io/badge/Cloud_Storage-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+
+### Development Tools
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+
+</div>
+
+---
+
+## 🚀 Getting Started
+
+### 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- ![Node.js](https://img.shields.io/badge/Node.js-v14+-339933?style=flat&logo=node.js&logoColor=white) **Node.js** (v14 or higher)
+- ![npm](https://img.shields.io/badge/npm-latest-CB3837?style=flat&logo=npm&logoColor=white) **npm** or **yarn**
+- 🔥 **Firebase Account** - [Create one here](https://console.firebase.google.com/)
+
+---
+
+### ⚡ Quick Start
+
+#### 1️⃣ **Clone the repository**
+
+```bash
+git clone https://github.com/tarunyadav9917/ChatFlow.git
+cd ChatFlow
+```
+
+#### 2️⃣ **Install dependencies**
+
+```bash
+npm install
+# or
+yarn install
+```
+
+#### 3️⃣ **Set up Firebase**
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Enable the following services:
+   - 🔐 **Authentication** (Email/Password)
+   - 💾 **Realtime Database**
+   - 📦 **Cloud Storage**
+   - 🌐 **Hosting** (optional)
+4. Copy your Firebase configuration
+
+#### 4️⃣ **Configure environment variables**
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+> 💡 **Tip:** Copy `.env.example` to `.env` and fill in your values
+
+#### 5️⃣ **Start the development server**
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+🎉 **Success!** Visit [`http://localhost:5173`](http://localhost:5173) to see your app!
+
+---
+
+## 📁 Project Structure
+
+```
+ChatFlow/
+│
+├── 📂 public/                  # Static assets
+│   └── 📂 assets/
+│       ├── images/
+│       └── icons/
+│
+├── 📂 src/
+│   ├── 📂 components/          # React components
+│   │   ├── 🔐 Auth/           # Authentication components
+│   │   │   ├── Login.jsx
+│   │   │   ├── Signup.jsx
+│   │   │   └── ForgotPassword.jsx
+│   │   │
+│   │   ├── 💬 Chat/           # Chat components
+│   │   │   ├── ChatWindow.jsx
+│   │   │   ├── Message.jsx
+│   │   │   ├── MessageInput.jsx
+│   │   │   └── TypingIndicator.jsx
+│   │   │
+│   │   ├── 📋 Sidebar/        # Sidebar components
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── ChatList.jsx
+│   │   │   └── UserList.jsx
+│   │   │
+│   │   └── 👤 Profile/        # Profile components
+│   │       ├── Profile.jsx
+│   │       ├── ProfileEdit.jsx
+│   │       └── Avatar.jsx
+│   │
+│   ├── 📂 context/             # React Context
+│   │   ├── AuthContext.jsx
+│   │   ├── ChatContext.jsx
+│   │   └── ThemeContext.jsx
+│   │
+│   ├── 📂 firebase/            # Firebase configuration
+│   │   ├── config.js
+│   │   ├── auth.js
+│   │   └── database.js
+│   │
+│   ├── 📂 hooks/               # Custom React hooks
+│   │   ├── useAuth.js
+│   │   ├── useChat.js
+│   │   └── useFirestore.js
+│   │
+│   ├── 📂 utils/               # Utility functions
+│   │   ├── helpers.js
+│   │   └── constants.js
+│   │
+│   ├── 📂 styles/              # Global styles
+│   │   ├── global.css
+│   │   └── variables.css
+│   │
+│   ├── App.jsx                 # Main App component
+│   └── main.jsx                # Entry point
+│
+├── .env.example                # Environment variables template
+├── .gitignore
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+---
+
+## 🎨 Feature Highlights
+
+### 🔐 Authentication System
+- **Secure Registration** - Email/password with validation
+- **Login System** - Persistent sessions with Firebase Auth
+- **Password Recovery** - Reset via email
+- **Session Management** - Auto logout & token refresh
+
+### 💬 Real-time Messaging
+- **Instant Delivery** - Messages appear immediately
+- **Message History** - Scroll through past conversations
+- **Edit & Delete** - Modify or remove messages
+- **Timestamps** - Know exactly when messages were sent
+- **Status Indicators** - Sent, delivered, and read states
+
+### 🎨 User Interface
+- **Modern Design** - Clean and intuitive
+- **Smooth Animations** - Polished user experience
+- **Mobile Responsive** - Perfect on all screen sizes
+- **Dark Mode** - Easy on the eyes
+- **Loading States** - Clear feedback during operations
+
+---
+
+## 🔒 Security
+
+<table>
+<tr>
+<td>
+
+### 🛡️ Security Features
+- ✅ Firebase Security Rules
+- ✅ Input sanitization (XSS prevention)
+- ✅ Secure authentication flows
+- ✅ Environment variable protection
+- ✅ HTTPS encryption
+- ✅ Private data isolation
+
+</td>
+<td>
+
+### 📝 Security Rules Example
+```javascript
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
+  }
+}
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🤝 Contributing
+
+We love contributions! 💖 Here's how you can help make ChatFlow better:
+
+### 🔧 How to Contribute
+
+1. **🍴 Fork the repository**
+   ```bash
+   # Click the 'Fork' button at the top right
+   ```
+
+2. **🌿 Create a feature branch**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+
+3. **💻 Make your changes**
+   - Write clean, maintainable code
+   - Follow existing code style
+   - Add comments where necessary
+
+4. **✅ Commit your changes**
+   ```bash
+   git commit -m 'Add some AmazingFeature'
+   ```
+
+5. **📤 Push to the branch**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+
+6. **🎉 Open a Pull Request**
+   - Describe your changes
+   - Reference any related issues
+
+### 📜 Code of Conduct
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+
+### 🐛 Found a Bug?
+
+[Open an issue](https://github.com/tarunyadav9917/ChatFlow/issues/new) and let us know!
+
+---
+
+## 📊 Roadmap
+
+- [ ] 🎥 Video calling
+- [ ] 🎙️ Voice messages
+- [ ] 🔍 Message search
+- [ ] 📌 Pin messages
+- [ ] 🌐 Multi-language support
+- [ ] 📱 Mobile app (React Native)
+- [ ] 🤖 Chatbot integration
+- [ ] 📊 Analytics dashboard
+
+---
+
+## 📝 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License - Copyright (c) 2025 Tarun Yadav
+```
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+### **Tarun Yadav**
+
+[![GitHub](https://img.shields.io/badge/GitHub-tarunyadav9917-181717?style=for-the-badge&logo=github)](https://github.com/tarunyadav9917)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/your-profile)
+[![Email](https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your.email@example.com)
+
+</div>
+
+---
+
+## 🙏 Acknowledgments
+
+Special thanks to:
+
+- 🔥 [**Firebase**](https://firebase.google.com/) - For amazing backend services
+- ⚛️ [**React**](https://reactjs.org/) - For the powerful UI library
+- ⚡ [**Vite**](https://vitejs.dev/) - For blazing fast builds
+- 🎨 [**Shields.io**](https://shields.io/) - For awesome badges
+- 💖 **All Contributors** - For making this project better
+
+---
+
+## 📮 Get in Touch
+
+Have questions, suggestions, or just want to say hi? 👋
+
+<div align="center">
+
+[![Open Issue](https://img.shields.io/badge/Open-Issue-2ea44f?style=for-the-badge&logo=github)](https://github.com/tarunyadav9917/ChatFlow/issues)
+[![Email Me](https://img.shields.io/badge/Email-Me-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your.email@example.com)
+[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/your-handle)
+
+</div>
+
+---
+
+<div align="center">
+
+### ⭐ **If you found this project helpful, please give it a star!** ⭐
+
+Made with ❤️ by [Tarun Yadav](https://github.com/tarunyadav9917)
+
+**© 2025 ChatFlow. All rights reserved.**
+
+</div>
