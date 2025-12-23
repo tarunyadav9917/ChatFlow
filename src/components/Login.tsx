@@ -40,7 +40,7 @@ const Login: React.FC = () => {
           setError('User already exists with this email or username');
         }
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);

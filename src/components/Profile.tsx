@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Camera, Edit3, LogOut, User, Mail, AtSign } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -17,7 +17,7 @@ const Profile: React.FC<ProfileProps> = ({ onBack }) => {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     setLoading(true);
     try {
       updateProfile(formData);
@@ -25,9 +25,9 @@ const Profile: React.FC<ProfileProps> = ({ onBack }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [formData, updateProfile]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -37,14 +37,14 @@ const Profile: React.FC<ProfileProps> = ({ onBack }) => {
       };
       reader.readAsDataURL(file);
     }
-  };
+  }, [updateProfile]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
-  };
+  }, []);
 
   if (!currentUser) return null;
 

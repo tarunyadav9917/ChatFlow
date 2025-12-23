@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { AuthState, User } from '../types';
 import { loadFromStorage, saveToStorage } from '../utils/storage';
 
@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     const users = loadFromStorage('users') || [];
     const user = users.find((u: User) => u.email === email);
     
@@ -47,9 +47,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const signup = async (username: string, email: string, password: string, name: string): Promise<boolean> => {
+  const signup = useCallback(async (username: string, email: string, password: string, name: string): Promise<boolean> => {
     const users = loadFromStorage('users') || [];
     const existingUser = users.find((u: User) => u.email === email || u.username === username);
     
@@ -76,9 +76,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     saveToStorage('currentUser', newUser);
     
     return true;
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     if (currentUser) {
       const users = loadFromStorage('users') || [];
       const updatedUser = { ...currentUser, isOnline: false, lastSeen: new Date() };
@@ -90,9 +90,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setCurrentUser(null);
     saveToStorage('auth', false);
     saveToStorage('currentUser', null);
-  };
+  }, [currentUser]);
 
-  const updateProfile = (updates: Partial<User>) => {
+  const updateProfile = useCallback((updates: Partial<User>) => {
     if (!currentUser) return;
     
     const updatedUser = { ...currentUser, ...updates };
@@ -102,7 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const users = loadFromStorage('users') || [];
     const updatedUsers = users.map((u: User) => u.id === currentUser.id ? updatedUser : u);
     saveToStorage('users', updatedUsers);
-  };
+  }, [currentUser]);
 
   const value: AuthState = {
     isAuthenticated,

@@ -41,7 +41,6 @@ export interface AuthState {
 export interface ChatState {
   chats: Chat[];
   messages: { [chatId: string]: Message[] };
-  activeChat: string | null;
   users: User[];
   blockedUsers: string[];
   sendMessage: (chatId: string, content: string, type: 'text' | 'image') => void;

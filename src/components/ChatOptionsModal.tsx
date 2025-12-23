@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { X, VolumeX, Volume2, UserX, UserCheck, Info } from 'lucide-react';
 import { Chat, User } from '../types';
 import { useChat } from '../context/ChatContext';
@@ -12,18 +12,21 @@ interface ChatOptionsModalProps {
 const ChatOptionsModal: React.FC<ChatOptionsModalProps> = ({ chat, onClose, otherUser }) => {
   const { muteChat, unmuteChat, blockUser, unblockUser, blockedUsers } = useChat();
 
-  const isBlocked = otherUser && blockedUsers.includes(otherUser.id);
+  const isBlocked = useMemo(() => 
+    otherUser ? blockedUsers.includes(otherUser.id) : false,
+    [otherUser, blockedUsers]
+  );
 
-  const handleMuteToggle = () => {
+  const handleMuteToggle = useCallback(() => {
     if (chat.isMuted) {
       unmuteChat(chat.id);
     } else {
       muteChat(chat.id);
     }
     onClose();
-  };
+  }, [chat.id, chat.isMuted, muteChat, unmuteChat, onClose]);
 
-  const handleBlockToggle = () => {
+  const handleBlockToggle = useCallback(() => {
     if (!otherUser) return;
     
     if (isBlocked) {
@@ -32,7 +35,7 @@ const ChatOptionsModal: React.FC<ChatOptionsModalProps> = ({ chat, onClose, othe
       blockUser(otherUser.id);
     }
     onClose();
-  };
+  }, [otherUser, isBlocked, blockUser, unblockUser, onClose]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">

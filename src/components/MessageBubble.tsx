@@ -11,7 +11,7 @@ interface MessageBubbleProps {
   senderInfo?: User;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ 
+const MessageBubble: React.FC<MessageBubbleProps> = React.memo(({ 
   message, 
   isOwn, 
   showAvatar, 
@@ -122,6 +122,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       </div>
     </div>
   );
-};
+});
+
+MessageBubble.displayName = 'MessageBubble';
 
 export default MessageBubble;

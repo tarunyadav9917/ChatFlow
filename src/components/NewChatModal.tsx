@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { X, Search, UserPlus, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
-import { User } from '../types';
 
 interface NewChatModalProps {
   onClose: () => void;
@@ -16,19 +15,18 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ onClose, onChatCreated }) =
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [chatType, setChatType] = useState<'private' | 'group'>('private');
   const [groupName, setGroupName] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
-  useEffect(() => {
-    const availableUsers = users.filter(user => 
+  // Memoize filtered users to avoid recalculation on every render
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => 
       user.id !== currentUser?.id && 
       !blockedUsers.includes(user.id) &&
       (user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
        user.username.toLowerCase().includes(searchTerm.toLowerCase()))
     );
-    setFilteredUsers(availableUsers);
   }, [users, currentUser, blockedUsers, searchTerm]);
 
-  const handleUserSelect = (userId: string) => {
+  const handleUserSelect = useCallback((userId: string) => {
     if (chatType === 'private') {
       setSelectedUsers([userId]);
     } else {
@@ -38,9 +36,9 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ onClose, onChatCreated }) =
           : [...prev, userId]
       );
     }
-  };
+  }, [chatType]);
 
-  const handleCreateChat = () => {
+  const handleCreateChat = useCallback(() => {
     if (selectedUsers.length === 0) return;
     
     if (chatType === 'group' && !groupName.trim()) {
@@ -56,7 +54,7 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ onClose, onChatCreated }) =
     
     onChatCreated(chatId);
     onClose();
-  };
+  }, [selectedUsers, chatType, groupName, createChat, onChatCreated, onClose]);
 
   const canCreateChat = selectedUsers.length > 0 && 
     (chatType === 'private' || (chatType === 'group' && groupName.trim()));
