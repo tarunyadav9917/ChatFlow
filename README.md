@@ -158,7 +158,7 @@ yarn dev
 
 For comprehensive AWS deployment instructions, see our detailed guide:
 
-**[📖 AWS Deployment Guide](AWS-DEPLOYMENT.md)**
+**[📖 Full AWS Deployment Guide](AWS-DEPLOYMENT.md)** | **[⚡ Quick Start Guide](DEPLOYMENT-QUICK-START.md)**
 
 The guide covers:
 - ✅ AWS Amplify (Recommended - easiest with CI/CD)
