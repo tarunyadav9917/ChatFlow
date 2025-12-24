@@ -9,7 +9,7 @@
 
 **A modern, feature-rich real-time chat application built with React and Firebase**
 
-[🎯 Features](#-features) • [🎥 Demo](#-demo) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Getting Started](#-getting-started) • [📁 Structure](#-project-structure) • [🤝 Contributing](#-contributing)
+[🎯 Features](#-features) • [🎥 Demo](#-demo) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Getting Started](#-getting-started) • [☁️ Deployment](#️-deployment) • [📁 Structure](#-project-structure) • [🤝 Contributing](#-contributing)
 
 </div>
 
@@ -149,6 +149,46 @@ yarn dev
 ```
 
 🎉 **Success!** Visit [`http://localhost:5173`](http://localhost:5173) to see your app!
+
+---
+
+## ☁️ Deployment
+
+### Deploy to AWS
+
+For comprehensive AWS deployment instructions, see our detailed guide:
+
+**[📖 AWS Deployment Guide](AWS-DEPLOYMENT.md)**
+
+The guide covers:
+- ✅ AWS Amplify (Recommended - easiest with CI/CD)
+- ✅ S3 + CloudFront (Cost-effective static hosting)
+- ✅ Elastic Beanstalk (Advanced deployments)
+- ✅ Custom domain setup with SSL
+- ✅ CI/CD with GitHub Actions
+- ✅ Monitoring and cost optimization
+
+### Deploy to Firebase Hosting
+
+```bash
+# Install Firebase CLI
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# Initialize Firebase
+firebase init hosting
+
+# Build and deploy
+npm run build
+firebase deploy
+```
+
+### Deploy to Other Platforms
+
+- **Vercel:** [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/tarunyadav9917/ChatFlow)
+- **Netlify:** [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tarunyadav9917/ChatFlow)
 
 ---
 
